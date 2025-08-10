@@ -163,9 +163,13 @@ public class AssetManager {
             ((Sound) asset).dispose();
         } else if (asset instanceof TiledMap) {
             ((TiledMap) asset).dispose();
-        } else if(asset instanceof Music) {
+        } else if (asset instanceof Music) {
             ((Music) asset).dispose();
         }
+
+        // Remove the asset from assetMap and fileMap
+        assetMap.remove(key);
+        fileMap.remove(key);
     }
 
     /**

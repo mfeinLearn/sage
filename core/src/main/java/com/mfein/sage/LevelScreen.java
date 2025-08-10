@@ -1,35 +1,19 @@
 package com.mfein.sage;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.mfein.sage.MainGame;
-import com.mfein.sage.MenuScreen;
-import com.mfein.sage.Practice.abcTutorial;
-import com.mfein.sage.Practice.battleTutorial;
-import com.mfein.sage.util.Constants;
 
 public class LevelScreen extends DefaultScreen {
 
-    private MainGame gameInstance;
+    private Main gameInstance;
     private Skin skin;
     private Stage stage;
     private Integer start, end;
@@ -39,7 +23,7 @@ public class LevelScreen extends DefaultScreen {
      * This is the Constructor.
      * @param gameInstance: Main variable.
      * */
-    public LevelScreen(MainGame gameInstance) {
+    public LevelScreen(Main gameInstance) {
         this.gameInstance = gameInstance;
         start = 0;
         end = 0; // gameInstance.gameStages.size();
@@ -52,7 +36,7 @@ public class LevelScreen extends DefaultScreen {
      * @param start: The position of the starting stage.
      * @param end: The position of the ending stage.
      * */
-    public LevelScreen(MainGame gameInstance, int start, int end) {
+    public LevelScreen(Main gameInstance, int start, int end) {
         this.gameInstance = gameInstance;
         this.start = start;
         this.end = end;
