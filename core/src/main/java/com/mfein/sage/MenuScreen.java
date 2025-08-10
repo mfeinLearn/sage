@@ -16,7 +16,7 @@ public class MenuScreen extends DefaultScreen {
     @Override
     public void render(float delta) {
         // Clear the screen with a solid color (e.g., black)
-        ScreenUtils.clear(1, 1, 0, 1);
+        ScreenUtils.clear(1, 0, 0, 1);
 
         // Begin the SpriteBatch
         batch.begin();
