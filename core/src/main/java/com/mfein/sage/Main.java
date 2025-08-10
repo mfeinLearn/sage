@@ -13,11 +13,16 @@ public class Main extends Game {
     private SpriteBatch batch;
     private Texture image;
 
+
+
     @Override
     public void create() {
-        //        setScreen(new MenuScreen(batch, image));
-        setScreen(new LevelScreen(this));
-        // testAssetManager(); // Call the test method on startup
+        boolean runTests = false; // Set to false to skip tests
+        if (runTests) {
+            testAssetManager();
+        }
+        setScreen(new LevelScreen(this));// setScreen(new MenuScreen(batch, image));
+
     }
 
 
