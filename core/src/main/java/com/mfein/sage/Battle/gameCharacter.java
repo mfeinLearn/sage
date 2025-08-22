@@ -23,8 +23,8 @@ public class gameCharacter {
     private Sprite[] HEARTS, GEMS, POINTS;
     private attackSpriteCol attacks;
     private Sprite characterAttack;
-    private Animation idleAnim, attackAnim, jumpAnim, hurtAnim;
-    private Animation[] characterAnim;
+    private Animation<TextureRegion> idleAnim, attackAnim, jumpAnim, hurtAnim;
+    private Animation<Animation>[] characterAnim;
     private float xPosition, yPostion, cX, cY, cWidth, cHeight, jumpInterval;
     private int heartsLimit, gemsLimit, pointsLimits;
     private boolean flip;

@@ -58,7 +58,7 @@ public class writingScreen extends DefaultScreen{
     private Main main;
     private double score;
     private String vertexShader, fragmentShader, string;
-    private Animation[][] animations;
+    private Animation<TextureRegion>[][] animations;
     private ShaderProgram shader;
     private DrawablePixmap drawable;
     private int drawableRegionWidth, drawableRegionHeight, w, h, start, end;

@@ -1,28 +1,37 @@
 package com.mfein.sage;
 
 import com.badlogic.gdx.Application;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.GL20;
+import com.mfein.sage.Stage.gameStage;
+import com.mfein.sage.util.RendererManager;
+import com.mfein.sage.util.AssetManager;
+import com.mfein.sage.util.MusicManager;
+import com.mfein.sage.util.PreferencesManager;
+import com.mfein.sage.util.stageConstants;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+
+// others
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mfein.sage.Menu_Options.Journey.LevelScreen;
 import com.mfein.sage.Stage.gameStage;
-import com.mfein.sage.util.RendererManager;
-import com.mfein.sage.util.PreferencesManager;
-import com.mfein.sage.util.stageConstants;
-import com.mfein.sage.util.AssetManager;
-import com.mfein.sage.util.MusicManager;
+
+
+
+
+
 import com.mfein.sage.util.page;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Main extends Game {
     private SpriteBatch batch;
@@ -43,10 +52,12 @@ public class Main extends Game {
     public MusicManager musicManager;
     public ArrayList<gameStage> gameStages;
     public HashMap<String, String> answerKeyForTheQuestions;
-//    public SSIM androidSIMM;
+    public SSIM androidSIMM;
     public int currentStage = 0;
 
-
+    public Main(SSIM androidSIMM) {
+        this.androidSIMM = androidSIMM;
+    }
 
 
     @Override
@@ -76,7 +87,7 @@ public class Main extends Game {
         if (runTests) {
             testAssetManager();
         }
-        setScreen(new LevelScreen(this));// setScreen(new MenuScreen(batch, image));
+        setScreen(new LevelScreen(this));// setScreen(new Menu Screen(batch, image));
 
     }
 

@@ -2,15 +2,27 @@ package com.mfein.sage.Stage;
 
 
 import com.badlogic.gdx.Screen;
-import com.omnipotence.game.Battle.battleMode;
-import com.omnipotence.game.Main;
-import com.omnipotence.game.Practice.defaultPracticeMode;
-import com.omnipotence.game.Practice.graphemesMode;
-import com.omnipotence.game.Practice.mathPracticeMode;
-import com.omnipotence.game.Practice.noTexturePracticeMode;
-import com.omnipotence.game.Practice.questionMode;
-import com.omnipotence.game.Practice.rimeFamilyMode;
-import com.omnipotence.game.Practice.toolsMode;
+//import com.omnipotence.game.Battle.battleMode;
+import com.mfein.sage.Battle.battleMode;
+//import com.omnipotence.game.Main;
+import com.mfein.sage.Main;
+//import com.omnipotence.game.Practice.defaultPracticeMode;
+import com.mfein.sage.Practice.defaultPracticeMode;
+//import com.omnipotence.game.Practice.graphemesMode;
+import com.mfein.sage.Practice.graphemesMode;
+//import com.omnipotence.game.Practice.mathPracticeMode;
+import com.mfein.sage.Practice.mathPracticeMode;
+//import com.omnipotence.game.Practice.noTexturePracticeMode;
+import com.mfein.sage.Practice.noTexturePracticeMode;
+//import com.omnipotence.game.Practice.questionMode;
+import com.mfein.sage.Practice.questionMode;
+
+
+//import com.omnipotence.game.Practice.rimeFamilyMode;
+import com.mfein.sage.Practice.rimeFamilyMode;
+
+//import com.omnipotence.game.Practice.toolsMode;
+import com.mfein.sage.Practice.toolsMode;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -43,7 +43,7 @@ public class CodeScreen extends DefaultScreen {
     private Label submitLabel;
     private ArrayList<String> encryptedStrings;
     private boolean showVictory = false;
-    private Animation victoryAnim;
+    private Animation<TextureRegion> victoryAnim;
     private float time = 0f;
 
     /**

@@ -35,7 +35,7 @@ public class TrainingScreen extends DefaultScreen {
     private Table mainContainer;
     private String[] list;
     private Texture[] textures;
-    private Animation[] alphabetAnimations;
+    private Animation<TextureRegion>[] alphabetAnimations;
     private ImageButton speakerButton;
     private float speakerButtonWidth, speakerButtonHeight, time;
     private int pointer = -1;

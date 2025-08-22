@@ -41,7 +41,7 @@ public class ScoreScreen extends DefaultScreen {
     private Main gameInstance;
     private float time = 0;
     private userData player1, player2;
-    private Animation[] playersAnim;
+    private Animation<TextureRegion>[] playersAnim;
     private float[][] playersPositions;
     private Json json;
     private scoreData scores;

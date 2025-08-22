@@ -40,7 +40,7 @@ public class MultiplayerResultScreen extends DefaultScreen {
     private Table mainContainer;
     private float battleFinishedTime, time = 0;
     private userData player1, player2;
-    private Animation[] playersAnim;
+    private Animation<TextureRegion>[] playersAnim;
     private float[][] playersPositions;
     private String[] encrytedStrings;
 

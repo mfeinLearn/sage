@@ -64,7 +64,7 @@ public class DecodeScreen extends DefaultScreen {
     private Texture correctTexture, incorrectTexture, gemsTexture;
     private float time;
     private boolean runAnimation;
-    private Animation animation;
+    private Animation<TextureRegion> animation;
     private int index;
     private HashMap<String, String[]> rimeMap;
 
