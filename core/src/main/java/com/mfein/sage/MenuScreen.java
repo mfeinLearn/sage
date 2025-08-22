@@ -1,33 +1,208 @@
 package com.mfein.sage;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.mfein.sage.Menu_Options.Training.TrainingSelectionScreen;
+import com.mfein.sage.Menu_Options.Journey.CharacterSelectionScreen;
+import com.mfein.sage.Menu_Options.ScoreScreen;
+import com.mfein.sage.Menu_Options.StoryScreen;
+import com.mfein.sage.Menu_Options.Battle.MultiplayerSelectionScreen;
+import com.mfein.sage.util.AssetManager;
+import com.mfein.sage.util.Constants;
+
+import com.mfein.sage.DefaultScreen;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class MenuScreen extends DefaultScreen {
-    private SpriteBatch batch;
-    private Texture image;
+    private Main gameInstance;
+    private Stage stage;
+    private SpriteBatch spriteBatch;
+    private Animation<TextureRegion> ring; // Fixed: Added generics
+    private float time = 0f;
 
-    public MenuScreen(SpriteBatch batch, Texture image) {
-        this.batch = batch;
-        this.image = image;
+    /**
+     * This is the Constructor.
+     * @param gameInstance: Instance of Main for access to variables stored only in the Main class.
+     */
+    public MenuScreen(Main gameInstance) {
+        this.gameInstance = gameInstance;
+        stage = new Stage();
+        spriteBatch = new SpriteBatch();
+
+        initMainContainer();
+
+        // Add Textures to the main container
+        addLogo();
+        addButtons();
+
+        Gdx.input.setInputProcessor(stage); // Allows the stage to take in input
     }
 
+    /**
+     * This function renders the textures and this includes the ring animation.
+     */
     @Override
     public void render(float delta) {
-        // Clear the screen with a solid color (e.g., black)
-        ScreenUtils.clear(1, 0, 0, 1);
+        stage.act();
+        stage.draw();
+        spriteBatch.begin();
+        time += delta;
+        TextureRegion ringFrame = ring.getKeyFrame(time, true); // Use TextureRegion variable
+        float width = Constants.gameWidth(ringFrame.getRegionWidth());
+        float height = Constants.gameHeight(ringFrame.getRegionHeight());
+        float x = Constants.gameX(0.825f, width);
+        float y = Constants.gameY(0.9f, height);
+        spriteBatch.draw(ringFrame, x, y, width, height);
+        spriteBatch.end();
+    }
 
-        // Begin the SpriteBatch
-        batch.begin();
-        // Draw the image at coordinates (0, 0)
-        batch.draw(image, 0, 0);
-        // End the SpriteBatch
-        batch.end();
+    /**
+     * Initialize the main table (container) with a background. This table holds
+     * and positions all buttons on the menu.
+     */
+    private void initMainContainer() {
+        Table mainContainer = new Table();
+        mainContainer.setBackground(AssetManager.getInstance()
+            .convertTextureToDrawable("menuBackground"));
+        mainContainer.setFillParent(true);
+        stage.addActor(mainContainer);
+    }
+
+    /**
+     * This function adds the logo and sets up the ring animation.
+     */
+    private void addLogo() {
+        Image projectGemLogo = new Image(AssetManager.getInstance()
+            .convertTextureToDrawable("gameLogo.png"));
+        ring = new Animation<TextureRegion>(1/7f, (new TextureAtlas(
+            Gdx.files.internal("Ring/RingWand.txt"))).getRegions()); // Fixed: Added generics
+        float width = Constants.gameWidth(projectGemLogo.getWidth() * 1.75f);
+        float height = Constants.gameHeight(projectGemLogo.getHeight() * 1.75f);
+        projectGemLogo.setSize(width, height);
+        projectGemLogo.setPosition(Constants.gameX(.4f, width), Constants.gameY(.85f, height));
+        stage.addActor(projectGemLogo);
+    }
+
+    /**
+     * This function adds the menu buttons to the Screen.
+     */
+    private void addButtons() {
+        setButton("training", new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                gameInstance.setScreen(new TrainingSelectionScreen(gameInstance));
+                System.out.println("Playing training Screen");
+                dispose();
+            }
+        }, 0);
+
+        setButton("journey", new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                //AssetManager.getInstance().getSound("button-click").play();
+                gameInstance.setScreen(new CharacterSelectionScreen(gameInstance));
+                dispose();
+            }
+        }, 1);
+
+        setButton("story", new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                gameInstance.setScreen(new StoryScreen(gameInstance));
+                System.out.println("Playing Story Screen");
+                dispose();
+            }
+        }, 2);
+
+        setButton("multiplayer", new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                gameInstance.setScreen(new MultiplayerSelectionScreen(gameInstance));
+                dispose();
+            }
+        }, 3);
+
+        setButton("scores", new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                gameInstance.setScreen(new ScoreScreen(gameInstance));
+            }
+        }, 4);
+    }
+
+    /**
+     * This function sets up the basic button stuff.
+     */
+    private void setButton(String s, ChangeListener listener, int i) {
+        TextureRegionDrawable buttonIcon = AssetManager.getInstance()
+            .convertTextureToDrawable(s + "Button.png");
+        TextureRegionDrawable buttonLogo = AssetManager.getInstance()
+            .convertTextureToDrawable(s + "Logo.png");
+        ImageButton imageButton = new ImageButton(buttonIcon);
+        imageButton.add(new Image(buttonLogo));
+        float width = Constants.gameWidth(256f + 60f * s.length());
+        float height = Constants.gameHeight(192f);
+        imageButton.setSize(width, height);
+        imageButton.setPosition(Constants.gameX(.35f, 0),
+            Constants.gameY(.65f - (.15f * i), height));
+        imageButton.addListener(listener);
+        stage.addActor(imageButton);
+    }
+
+    /**
+     * This function disposes of the assets.
+     */
+    @Override
+    public void dispose() {
+        stage.dispose();
+        spriteBatch.dispose();
+        // Dispose of ring animation textures
+        for (TextureRegion region : ring.getKeyFrames()) {
+            if (region.getTexture() != null) {
+                region.getTexture().dispose();
+            }
+        }
     }
 
     @Override
-    public void dispose() {
-        // Resources are disposed of in MainGame, so no need to dispose here
+    protected void setPositions() {
+
+    }
+
+    @Override
+    protected void createExtraAssets() {
+
+    }
+
+    @Override
+    public void setImageButtonListeners(int i) {
+
+    }
+
+    @Override
+    protected void renderExtraStuff(float delta) {
+
+    }
+
+    @Override
+    protected void disposeExtraAssets() {
+
+    }
+
+    @Override
+    protected void change() {
+
     }
 }
