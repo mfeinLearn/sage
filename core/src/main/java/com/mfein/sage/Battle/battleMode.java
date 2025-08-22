@@ -304,7 +304,7 @@ public class battleMode extends DefaultScreen {
     /**
      * This function mixes up the choices after a right answer.
      */
-    private void change() {
+    protected void change() {
         int turn = (int) (Math.random() * choices.length);
         int indexPicked = (int) (Math.random() * arr.size());
         ArrayList<String> picked = new ArrayList<String>();
@@ -482,6 +482,31 @@ public class battleMode extends DefaultScreen {
         villian.characterDispose();
         stage.dispose();
         skin.dispose();
+    }
+
+    @Override
+    protected void setPositions() {
+
+    }
+
+    @Override
+    protected void createExtraAssets() {
+
+    }
+
+    @Override
+    public void setImageButtonListeners(int i) {
+
+    }
+
+    @Override
+    protected void renderExtraStuff(float delta) {
+
+    }
+
+    @Override
+    protected void disposeExtraAssets() {
+
     }
 
 }

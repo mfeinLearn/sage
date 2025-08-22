@@ -12,12 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mfein.sage.Main;
 import com.mfein.sage.MenuScreen;
 import com.mfein.sage.DefaultScreen;
-import com.mfein.sage.util.page;
 import com.mfein.sage.util.AssetManager;
 import com.mfein.sage.util.Constants;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Copyright 2015, Omnipotence, LLC, All rights reserved.
@@ -171,5 +169,35 @@ public class StoryScreen extends DefaultScreen {
     public void dispose() {
         stage.dispose();
         skin.dispose();
+    }
+
+    @Override
+    protected void setPositions() {
+
+    }
+
+    @Override
+    protected void createExtraAssets() {
+
+    }
+
+    @Override
+    public void setImageButtonListeners(int i) {
+
+    }
+
+    @Override
+    protected void renderExtraStuff(float delta) {
+
+    }
+
+    @Override
+    protected void disposeExtraAssets() {
+
+    }
+
+    @Override
+    protected void change() {
+
     }
 }

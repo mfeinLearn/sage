@@ -1,4 +1,4 @@
-package com.mfein.sage.util;
+package com.mfein.sage;
 
 /**
  * This class is used to create Story pages.

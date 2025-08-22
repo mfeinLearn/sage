@@ -1,3 +1,7 @@
+
+
+
+
 package com.mfein.sage.Practice;
 
 import com.badlogic.gdx.Gdx;
@@ -280,6 +284,36 @@ public class writingScreen extends DefaultScreen{
         stage2.dispose();
         skin.dispose();
         skin2.dispose();
+    }
+
+    @Override
+    protected void setPositions() {
+
+    }
+
+    @Override
+    protected void createExtraAssets() {
+
+    }
+
+    @Override
+    public void setImageButtonListeners(int i) {
+
+    }
+
+    @Override
+    protected void renderExtraStuff(float delta) {
+
+    }
+
+    @Override
+    protected void disposeExtraAssets() {
+
+    }
+
+    @Override
+    protected void change() {
+
     }
 
     /**

@@ -421,6 +421,31 @@ public class DecodeScreen extends DefaultScreen {
         }
     }
 
+    @Override
+    protected void setPositions() {
+
+    }
+
+    @Override
+    protected void createExtraAssets() {
+
+    }
+
+    @Override
+    public void setImageButtonListeners(int i) {
+
+    }
+
+    @Override
+    protected void renderExtraStuff(float delta) {
+
+    }
+
+    @Override
+    protected void disposeExtraAssets() {
+
+    }
+
     /**
      * This function mixes up the choices after the player gets a right answer.
      * */

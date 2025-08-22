@@ -18,25 +18,16 @@ import java.util.HashMap;
 
 
 // others
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.mfein.sage.Menu_Options.Journey.LevelScreen;
-import com.mfein.sage.Stage.gameStage;
-
-
-
-
-
-import com.mfein.sage.util.page;
+//import com.badlogic.gdx.audio.Music;
+//import com.badlogic.gdx.audio.Sound;
+//import com.badlogic.gdx.graphics.Texture;
+//import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+//import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+//import com.mfein.sage.Menu_Options.Journey.LevelScreen;
+//import com.mfein.sage.Stage.gameStage;
 
 
 public class Main extends Game {
-    private SpriteBatch batch;
-    private Texture image;
-
 
     /**
      * 0 for English
@@ -59,10 +50,8 @@ public class Main extends Game {
         this.androidSIMM = androidSIMM;
     }
 
-
     @Override
     public void create() {
-
         setStages();
         loadAssets();
 
@@ -81,35 +70,6 @@ public class Main extends Game {
 
         musicManager = new MusicManager();
         callNextScreen();
-
-        // for testing
-        boolean runTests = false; // Set to false to skip tests
-        if (runTests) {
-            testAssetManager();
-        }
-        setScreen(new LevelScreen(this));// setScreen(new Menu Screen(batch, image));
-
-    }
-
-    private void grabAssets(String location) {
-        FileHandle dirHandle = Gdx.files.internal(((Gdx.app.getType() ==
-            Application.ApplicationType.Desktop) ? "./bin/" : "") + location);
-        //System.out.println(dirHandle.toString());
-        if(dirHandle != null) {
-            for (FileHandle entry : dirHandle.list()) {
-                String key = entry.name();
-                String value = location + "/" + entry.name();
-                if (entry.isDirectory()) {
-                    for (FileHandle innerEntry: entry.list()) {
-                        String key2 = "." + innerEntry.name();
-                        String value2 = "/" + innerEntry.name();
-                        register(key+key2, value+value2);
-                    }
-                } else {
-                    register(key, value);
-                }
-            }
-        }
     }
 
     private void setStages() {
@@ -179,9 +139,6 @@ public class Main extends Game {
         this.setScreen(new MenuScreen(this));
     }
 
-    ////////////////////////////////////////
-    // Later put in AssetManager class!
-    ////////////////////////////////////////
     public void loadAssets() {
         // Load game sound effects
         AssetManager.getInstance().registerAudio("wrong-answer",
@@ -252,6 +209,27 @@ public class Main extends Game {
 
     }
 
+    private void grabAssets(String location) {
+        FileHandle dirHandle = Gdx.files.internal(((Gdx.app.getType() ==
+            Application.ApplicationType.Desktop) ? "./bin/" : "") + location);
+        //System.out.println(dirHandle.toString());
+        if(dirHandle != null) {
+            for (FileHandle entry : dirHandle.list()) {
+                String key = entry.name();
+                String value = location + "/" + entry.name();
+                if (entry.isDirectory()) {
+                    for (FileHandle innerEntry: entry.list()) {
+                        String key2 = "." + innerEntry.name();
+                        String value2 = "/" + innerEntry.name();
+                        register(key+key2, value+value2);
+                    }
+                } else {
+                    register(key, value);
+                }
+            }
+        }
+    }
+
     private void register(String key, String value) {
         //System.out.println(key);
         //System.out.println(value);
@@ -272,50 +250,10 @@ public class Main extends Game {
 
     @Override
     public void dispose() {
-        batch.dispose();
-        image.dispose();
-        super.dispose();
-        // Ensure cleanup
-        AssetManager.getInstance().disposeAll();
         // Dispose of background music
         musicManager.dispose();
-    }
-
-
-
-    ////////////////////////////////////////
-    // Later put in AssetManager class!
-    ////////////////////////////////////////
-    public void testAssetManager() {
-        AssetManager manager = AssetManager.getInstance();
-
-        // Test 1: Register and get texture
-        manager.registerTexture("testTexture", "test.png");
-        Texture texture = manager.getTexture("testTexture");
-        Gdx.app.log("AssetManagerTest", "Texture loaded: " + (texture != null));
-
-        // Test 2: Register and get audio
-        manager.registerAudio("testAudio", "test.wav");
-        Sound sound = manager.getSound("testAudio");
-        Music music = manager.getMusic("testAudio");
-        Gdx.app.log("AssetManagerTest", "Sound loaded: " + (sound != null));
-        Gdx.app.log("AssetManagerTest", "Music loaded: " + (music != null));
-
-        // Test 3: Convert texture to drawable
-        TextureRegionDrawable drawable = manager.convertTextureToDrawable("testTexture");
-        Gdx.app.log("AssetManagerTest", "Drawable created: " + (drawable != null));
-
-        // Test 4: Test non-existent asset
-        Texture nonExistent = manager.getTexture("nonExistent");
-        Gdx.app.log("AssetManagerTest", "Non-existent texture fallback: " + (nonExistent != null));
-
-        // Test 5: Dispose asset
-        manager.dispose("testTexture");
-        Gdx.app.log("AssetManagerTest", "Texture after dispose: " + (manager.getAsset("testTexture") == null));
-
-        // Test 6: Dispose all
-        manager.disposeAll();
-        Gdx.app.log("AssetManagerTest", "All assets after disposeAll: " + (manager.getAsset("testAudio") == null));
+        // Dispose of all assets on exit
+        AssetManager.getInstance().disposeAll();
     }
 
 }

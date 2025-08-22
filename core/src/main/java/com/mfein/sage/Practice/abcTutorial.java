@@ -80,7 +80,7 @@ public class abcTutorial extends DefaultScreen {
         createExtraAssets();
     }
 
-    private void setPositions() {
+    protected void setPositions() {
         this.positions[0] = new float[]{0f, .5f, .1f, .5f};
         this.positions[1] = new float[]{1f, .5f, .9f, .5f};
         this.positions[2] = new float[]{0f, .2f, .1f, .2f};
@@ -111,7 +111,7 @@ public class abcTutorial extends DefaultScreen {
         };
     }
 
-    private void createExtraAssets() {
+    protected void createExtraAssets() {
         centralButton = new ImageButton(AssetManager.getInstance()
             .convertTextureToDrawable("speaker.png"));
         centralButton.setPosition(Constants.gameX(.5f, 150f), Constants.gameY(.75f, 150f));
@@ -153,7 +153,7 @@ public class abcTutorial extends DefaultScreen {
         });
     }
 
-    private void setImageButtonListeners(final int i) {
+    public void setImageButtonListeners(final int i) {
         imageButtons[i].addListener(new InputListener(){
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
                 if(i == 0 && scene == 8) {
@@ -163,6 +163,16 @@ public class abcTutorial extends DefaultScreen {
                 return true;
             }
         });
+    }
+
+    @Override
+    protected void renderExtraStuff(float delta) {
+
+    }
+
+    @Override
+    protected void disposeExtraAssets() {
+
     }
 
     protected void change() {

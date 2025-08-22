@@ -1,0 +1,3 @@
+showSubtractionProblems=true
+showMultiplicationProblems=true
+showAdditionProblems=true

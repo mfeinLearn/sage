@@ -142,4 +142,34 @@ public class CharacterSelectionScreen extends DefaultScreen {
         stage.dispose();
         skin.dispose();
     }
+
+    @Override
+    protected void setPositions() {
+
+    }
+
+    @Override
+    protected void createExtraAssets() {
+
+    }
+
+    @Override
+    public void setImageButtonListeners(int i) {
+
+    }
+
+    @Override
+    protected void renderExtraStuff(float delta) {
+
+    }
+
+    @Override
+    protected void disposeExtraAssets() {
+
+    }
+
+    @Override
+    protected void change() {
+
+    }
 }

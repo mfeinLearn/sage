@@ -24,7 +24,7 @@ public class gameCharacter {
     private attackSpriteCol attacks;
     private Sprite characterAttack;
     private Animation<TextureRegion> idleAnim, attackAnim, jumpAnim, hurtAnim;
-    private Animation<Animation>[] characterAnim;
+    private Animation<TextureRegion>[] characterAnim; // Fixed from Animation<Animation>[]
     private float xPosition, yPostion, cX, cY, cWidth, cHeight, jumpInterval;
     private int heartsLimit, gemsLimit, pointsLimits;
     private boolean flip;
@@ -64,17 +64,15 @@ public class gameCharacter {
         TextureAtlas attackAtlas = new TextureAtlas(doesFileExist(character, "Attack"));
         TextureAtlas jumpAtlas = new TextureAtlas(doesFileExist(character, "Jumping"));
         TextureAtlas hurtAtlas = new TextureAtlas(doesFileExist(character, "Hurt"));
-        this.idleAnim = new Animation(1/15f, idleAtlas.getRegions());
-        this.attackAnim = new Animation(1/15f, attackAtlas.getRegions());
-        this.jumpAnim = new Animation(1/15f, jumpAtlas.getRegions());
-        this.hurtAnim = new Animation(1/15f, hurtAtlas.getRegions());
-        this.characterAnim = new Animation[]{ this.idleAnim , this.attackAnim, this.jumpAnim,
-            this.hurtAnim};
+        this.idleAnim = new Animation<TextureRegion>(1/15f, idleAtlas.getRegions());
+        this.attackAnim = new Animation<TextureRegion>(1/15f, attackAtlas.getRegions());
+        this.jumpAnim = new Animation<TextureRegion>(1/15f, jumpAtlas.getRegions());
+        this.hurtAnim = new Animation<TextureRegion>(1/15f, hurtAtlas.getRegions());
+        this.characterAnim = new Animation[]{ this.idleAnim, this.attackAnim, this.jumpAnim, this.hurtAnim };
         this.cWidth = Constants.gameWidth(idleAnim.getKeyFrame(0).getRegionWidth());
         this.cHeight = Constants.gameHeight(idleAnim.getKeyFrame(0).getRegionHeight());
         this.cX = Constants.gameX(xPosition, cWidth);
         this.cY = Constants.gameY(yPosition, cHeight);
-        //System.out.println("Character: "+ cWidth + " " +cHeight + " "+cX +" "+cY);
         attacks = new attackSpriteCol();
     }
 
@@ -186,24 +184,22 @@ public class gameCharacter {
      * This function draws the idle animation of the character.
      */
     public void drawCharacterIdle(SpriteBatch spriteBatch, float time) {
-        TextureRegion textureRegion = idleAnim.getKeyFrame(time);
+        TextureRegion textureRegion = idleAnim.getKeyFrame(time, true);
         cWidth = Constants.gameWidth(textureRegion.getRegionWidth());
         cHeight = Constants.gameHeight(textureRegion.getRegionHeight());
-        spriteBatch.draw(idleAnim.getKeyFrame(time, true),
-            !flip ? cX + cWidth : cX, cY, !flip ? -cWidth : cWidth, cHeight);
+        spriteBatch.draw(textureRegion, !flip ? cX + cWidth : cX, cY, !flip ? -cWidth : cWidth, cHeight);
     }
 
     /**
      * This function draws the attack animation of the character.
      */
     public void drawCharacterAttack(SpriteBatch spriteBatch, float time, float speed) {
-        TextureRegion textureRegion = attackAnim.getKeyFrame(time);
+        TextureRegion textureRegion = attackAnim.getKeyFrame(time, false);
         float width = Constants.gameWidth(textureRegion.getRegionWidth());
         float height = Constants.gameHeight(textureRegion.getRegionHeight());
-        spriteBatch.draw(attackAnim.getKeyFrame(time, false),
-            !flip ? cX + width : cX, cY, !flip ? -width : width, height);
+        spriteBatch.draw(textureRegion, !flip ? cX + width : cX, cY, !flip ? -width : width, height);
 
-        if(attackAnim.isAnimationFinished(time * 2)) {
+        if (attackAnim.isAnimationFinished(time * 2)) {
             characterAttack.draw(spriteBatch);
             characterAttack.setX(characterAttack.getX() + speed);
         }
@@ -247,27 +243,23 @@ public class gameCharacter {
      * Ignore.
      */
     public void drawCharacter(SpriteBatch spriteBatch, float time) {
-        TextureRegion textureRegion = characterAnim[state]
-            .getKeyFrame(time/((state == 2) ? 6.4f: 1f), state == 0);
+        TextureRegion textureRegion = characterAnim[state].getKeyFrame(time / ((state == 2) ? 6.4f : 1f), state == 0);
         cWidth = Constants.gameWidth(textureRegion.getRegionWidth());
         cHeight = Constants.gameHeight(textureRegion.getRegionHeight());
-        spriteBatch.draw(textureRegion, !flip ? cX + cWidth : cX, cY, !flip ? -cWidth : cWidth,
-            cHeight);
-        if(state == 1) {
-            if(characterAnim[state].isAnimationFinished(time * 2)) {
+        spriteBatch.draw(textureRegion, !flip ? cX + cWidth : cX, cY, !flip ? -cWidth : cWidth, cHeight);
+        if (state == 1) {
+            if (characterAnim[state].isAnimationFinished(time * 2)) {
                 characterAttack.draw(spriteBatch);
                 characterAttack.setX(characterAttack.getX() + attackSpeed);
             }
-        } else if(state == 2) {
-            if(time < jumpLimit) {
-                cY = Constants.gameY(yPostion+(jumpInterval*time), cHeight);
-            } else if(time < jumpLimit*2) {
-                cY = Constants.gameY(
-                    (yPostion+(jumpInterval*jumpLimit))-(jumpInterval*(time%jumpLimit+1)), cHeight);
+        } else if (state == 2) {
+            if (time < jumpLimit) {
+                cY = Constants.gameY(yPostion + (jumpInterval * time), cHeight);
+            } else if (time < jumpLimit * 2) {
+                cY = Constants.gameY((yPostion + (jumpInterval * jumpLimit)) - (jumpInterval * (time % jumpLimit + 1)), cHeight);
             }
-            spriteBatch.draw(textureRegion, !flip ? cX + cWidth : cX, cY, !flip ? -cWidth : cWidth,
-                cHeight);
-            if(time >= jumpLimit*2) {
+            spriteBatch.draw(textureRegion, !flip ? cX + cWidth : cX, cY, !flip ? -cWidth : cWidth, cHeight);
+            if (time >= jumpLimit * 2) {
                 state = 0;
                 changePoints(-1);
             }
@@ -420,16 +412,25 @@ public class gameCharacter {
      * This functions disposes the assets.
      */
     public void characterDispose() {
-        this.HUB.getTexture().dispose();
-        for(int i = 0; i < 10; i++) {
-            this.HEARTS[i].getTexture().dispose();
-            this.GEMS[i].getTexture().dispose();
-            this.POINTS[i].getTexture().dispose();
+        HUB.getTexture().dispose();
+        for (int i = 0; i < 10; i++) {
+            if (HEARTS[i] != null) HEARTS[i].getTexture().dispose();
+            if (GEMS[i] != null) GEMS[i].getTexture().dispose();
+            if (POINTS[i] != null) POINTS[i].getTexture().dispose();
         }
         attacks.dispose();
-        characterAttack.getTexture().dispose();
-        for(TextureRegion regions : attackAnim.getKeyFrames()) {
-            regions.getTexture().dispose();
+        if (characterAttack != null) characterAttack.getTexture().dispose();
+        for (TextureRegion region : idleAnim.getKeyFrames()) {
+            if (region.getTexture() != null) region.getTexture().dispose();
+        }
+        for (TextureRegion region : attackAnim.getKeyFrames()) {
+            if (region.getTexture() != null) region.getTexture().dispose();
+        }
+        for (TextureRegion region : jumpAnim.getKeyFrames()) {
+            if (region.getTexture() != null) region.getTexture().dispose();
+        }
+        for (TextureRegion region : hurtAnim.getKeyFrames()) {
+            if (region.getTexture() != null) region.getTexture().dispose();
         }
     }
 
