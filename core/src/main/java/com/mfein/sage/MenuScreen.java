@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Array;
 import com.mfein.sage.Menu_Options.Training.TrainingSelectionScreen;
 import com.mfein.sage.Menu_Options.Journey.CharacterSelectionScreen;
 import com.mfein.sage.Menu_Options.ScoreScreen;
@@ -50,6 +51,24 @@ public class MenuScreen extends DefaultScreen {
         Gdx.input.setInputProcessor(stage); // Allows the stage to take in input
     }
 
+//    /**
+//     * This function renders the textures and this includes the ring animation.
+//     */
+//    @Override
+//    public void render(float delta) {
+//        stage.act();
+//        stage.draw();
+//        spriteBatch.begin();
+//        time += delta;
+//        TextureRegion ringFrame = ring.getKeyFrame(time, true); // Use TextureRegion variable
+//        float width = Constants.gameWidth(ringFrame.getRegionWidth());
+//        float height = Constants.gameHeight(ringFrame.getRegionHeight());
+//        float x = Constants.gameX(0.825f, width);
+//        float y = Constants.gameY(0.9f, height);
+//        spriteBatch.draw(ringFrame, x, y, width, height);
+//        spriteBatch.end();
+//    }
+
     /**
      * This function renders the textures and this includes the ring animation.
      */
@@ -59,14 +78,14 @@ public class MenuScreen extends DefaultScreen {
         stage.draw();
         spriteBatch.begin();
         time += delta;
-        TextureRegion ringFrame = ring.getKeyFrame(time, true); // Use TextureRegion variable
-        float width = Constants.gameWidth(ringFrame.getRegionWidth());
-        float height = Constants.gameHeight(ringFrame.getRegionHeight());
-        float x = Constants.gameX(0.825f, width);
-        float y = Constants.gameY(0.9f, height);
-        spriteBatch.draw(ringFrame, x, y, width, height);
+        spriteBatch.draw(ring.getKeyFrame(time, true),
+            Constants.gameX(.825f, Constants.gameWidth(ring.getKeyFrame(time).getRegionWidth())),
+            Constants.gameY(.9f, Constants.gameWidth(ring.getKeyFrame(time).getRegionHeight())),
+            Constants.gameWidth(ring.getKeyFrame(time).getRegionWidth()),
+            Constants.gameHeight(ring.getKeyFrame(time).getRegionHeight()));
         spriteBatch.end();
     }
+
 
     /**
      * Initialize the main table (container) with a background. This table holds
@@ -80,18 +99,59 @@ public class MenuScreen extends DefaultScreen {
         stage.addActor(mainContainer);
     }
 
+//    /**
+//     * This function adds the logo and sets up the ring animation.
+//     */
+//    private void addLogo() {
+//        Image projectGemLogo = new Image(AssetManager.getInstance()
+//            .convertTextureToDrawable("gameLogo.png"));
+//        ring = new Animation<TextureRegion>(1/7f, (new TextureAtlas(
+//            Gdx.files.internal("Ring/RingWand.txt"))).getRegions()); // Fixed: Added generics
+//        float width = Constants.gameWidth(projectGemLogo.getWidth() * 1.75f);
+//        float height = Constants.gameHeight(projectGemLogo.getHeight() * 1.75f);
+//        projectGemLogo.setSize(width, height);
+//        projectGemLogo.setPosition(Constants.gameX(.4f, width), Constants.gameY(.85f, height));
+//        stage.addActor(projectGemLogo);
+//    }
+
     /**
      * This function adds the logo and sets up the ring animation.
      */
+//    private void addLogo() {
+//        Image projectGemLogo = new Image(AssetManager.getInstance()
+//            .convertTextureToDrawable("gameLogo.png"));
+//        ring = new Animation<TextureRegion>(1/7f, (new TextureAtlas(
+//            Gdx.files.internal("Ring/RingWand.txt"))).getRegions());
+///*        chest = new Animation(1/15f, (new TextureAtlas(
+//                Gdx.files.internal("Chest/chestOpen.txt"))).getRegions());*/
+//        float width = Constants.gameWidth(projectGemLogo.getWidth()*1.75f);
+//        float height = Constants.gameHeight(projectGemLogo.getHeight()*1.75f);
+//        projectGemLogo.setSize(width, height);
+//        projectGemLogo.setPosition(Constants.gameX(.4f, width), Constants.gameY(.85f, height));
+//        stage.addActor(projectGemLogo);
+//    }
     private void addLogo() {
         Image projectGemLogo = new Image(AssetManager.getInstance()
             .convertTextureToDrawable("gameLogo.png"));
-        ring = new Animation<TextureRegion>(1/7f, (new TextureAtlas(
-            Gdx.files.internal("Ring/RingWand.txt"))).getRegions()); // Fixed: Added generics
+
+        // Create the ring animation
+        TextureAtlas ringAtlas = new TextureAtlas(Gdx.files.internal("Ring/RingWand.txt"));
+        Array<TextureAtlas.AtlasRegion> ringRegions = ringAtlas.getRegions();
+        TextureRegion[] ringFrames = ringRegions.toArray(TextureRegion.class);
+        ring = new Animation<TextureRegion>(1/7f, ringFrames);
+
+        // Uncomment and fix the chest animation similarly
+        /*
+        TextureAtlas chestAtlas = new TextureAtlas(Gdx.files.internal("Chest/chestOpen.txt"));
+        Array<AtlasRegion> chestRegions = chestAtlas.getRegions();
+        TextureRegion[] chestFrames = chestRegions.toArray(TextureRegion.class);
+        chest = new Animation<TextureRegion>(1/15f, chestFrames);
+        */
+
         float width = Constants.gameWidth(projectGemLogo.getWidth() * 1.75f);
         float height = Constants.gameHeight(projectGemLogo.getHeight() * 1.75f);
         projectGemLogo.setSize(width, height);
-        projectGemLogo.setPosition(Constants.gameX(.4f, width), Constants.gameY(.85f, height));
+        projectGemLogo.setPosition(Constants.gameX(0.4f, width), Constants.gameY(0.85f, height));
         stage.addActor(projectGemLogo);
     }
 
@@ -175,6 +235,10 @@ public class MenuScreen extends DefaultScreen {
             }
         }
     }
+
+
+
+    // ****required*** //
 
     @Override
     protected void setPositions() {

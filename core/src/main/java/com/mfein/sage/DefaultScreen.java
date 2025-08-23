@@ -34,6 +34,8 @@ public abstract class DefaultScreen implements Screen {
     public void dispose() {
     }
 
+    // ****required**** //
+
     protected abstract void setPositions();
 
     protected abstract void createExtraAssets();

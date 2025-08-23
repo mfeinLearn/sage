@@ -133,7 +133,8 @@ public abstract class centralCore extends DefaultScreen {
      */
     private void initMainContainer() {
         mainContainer = new Table();
-        mainContainer.setBackground(AssetManager.getInstance().convertTextureToDrawable("practiceBackground"));
+        mainContainer.setBackground(AssetManager.getInstance()
+            .convertTextureToDrawable("practiceBackground"));
         mainContainer.setFillParent(true);
         stage.addActor(mainContainer);
     }
