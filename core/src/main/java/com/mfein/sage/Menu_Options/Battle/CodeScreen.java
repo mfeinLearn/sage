@@ -60,7 +60,7 @@ public class CodeScreen extends DefaultScreen {
         this.field = new TextField("", skin);
         encryptedStrings = new ArrayList<String>(
             Arrays.asList("A","C","E","P","O","L","K","M","Q","R"));
-        victoryAnim =  new Animation(1/15f, (new TextureAtlas(
+        victoryAnim =  new Animation<TextureRegion>(1/15f, (new TextureAtlas(
             Gdx.files.internal("Characters/gemCollectorVictory.txt"))).getRegions());
         setUpField();
         setUpButtons();

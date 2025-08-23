@@ -165,15 +165,7 @@ public class abcTutorial extends DefaultScreen {
         });
     }
 
-    @Override
-    protected void renderExtraStuff(float delta) {
 
-    }
-
-    @Override
-    protected void disposeExtraAssets() {
-
-    }
 
     protected void change() {
         centralButton.setStyle(newStyle(character + ".png"));
@@ -360,6 +352,16 @@ public class abcTutorial extends DefaultScreen {
             arr.remove(j);
         }
         arr.addAll(picked);
+    }
+
+    @Override
+    protected void renderExtraStuff(float delta) {
+
+    }
+
+    @Override
+    protected void disposeExtraAssets() {
+
     }
 
 }
