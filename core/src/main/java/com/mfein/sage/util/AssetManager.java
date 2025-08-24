@@ -155,15 +155,31 @@ public class AssetManager {
         return (Music) asset;
     }
 
+//    /**
+//     * Convert a Texture to a drawable Texture, which can be added to a UI
+//     * button.
+//     * @param textureAssetKey: The asset key of the texture to be converted.
+//     * @return The converted texture.
+//     */
+//    public TextureRegionDrawable convertTextureToDrawable(String textureAssetKey) {
+//        return new TextureRegionDrawable(new TextureRegion(
+//            getTexture(textureAssetKey)));
+//    }
+
     /**
-     * Convert a Texture to a drawable Texture, which can be added to a UI
-     * button.
-     * @param textureAssetKey: The asset key of the texture to be converted.
-     * @return The converted texture.
+     * Convert a Texture to a drawable Texture, which can be added to a UI button.
+     * @param textureAssetKey: The path of the texture (relative to assets/).
+     * @return The converted texture, or null if not found.
      */
     public TextureRegionDrawable convertTextureToDrawable(String textureAssetKey) {
-        return new TextureRegionDrawable(new TextureRegion(
-            getTexture(textureAssetKey)));
+        FileHandle handle = getHandle(textureAssetKey);
+        if (handle != null) {
+            Texture texture = new Texture(handle);
+            registerAsset(textureAssetKey, texture); // Cache the texture
+            return new TextureRegionDrawable(new TextureRegion(texture));
+        }
+        System.err.println("Failed to load texture: " + textureAssetKey);
+        return null; // Let caller handle the null case
     }
 
     /**

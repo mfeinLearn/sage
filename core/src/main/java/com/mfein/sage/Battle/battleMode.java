@@ -238,32 +238,94 @@ public class battleMode extends DefaultScreen {
         stage.addActor(button);
     }
 
+//    /**
+//     * This function sets up the Imagebuttons for the choices.
+//     */
+//    private ImageButton newImageButton(String style, float x, float y, float w, float h,
+//                                       final int i) {
+//        w = Constants.gameWidth(w);
+//        h = Constants.gameHeight(h);
+//        ImageButton imageButton = new ImageButton(newStyle(style, w, h));
+//        imageButton.setPosition(Constants.gameX(x, w), Constants.gameY(y, h));
+//        imageButton.setSize(w, h);
+//        stage.addActor(imageButton);
+//        imageButton.addListener(new InputListener(){
+//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//                System.out.println("Image Touch: " + i);
+//                if (!gemcolatk && !mentoratk) {
+//                    if(battleType == 5) {
+//                        if (choices[i].equals(choice)) {
+//                            if(whoseTurn == 0) {
+//                                if(falseFirstTime) {
+//                                    player1.hasCountered();
+//                                }
+//                                player1.gotCorrect();
+//                                hero.setupAttack();
+//                                gemcolatk = true;
+//                            } else {
+//                                if(falseFirstTime) {
+//                                    player2.hasCountered();
+//                                }
+//                                player2.gotCorrect();
+//                                villian.setupAttack();
+//                                mentoratk = true;
+//                            }
+//                            change();
+//                        } else {
+//                            if(!falseFirstTime) {
+//                                falseFirstTime = true;
+//                            }
+//                            if(whoseTurn == 0) {
+//                                player1.hasMissed();
+//                            } else {
+//                                player2.hasMissed();
+//                            }
+//                        }
+//                        whoseTurn = (whoseTurn+1) % 2;
+//                    } else {
+//                        if (choices[i].equals(choice)) {
+//                            change();
+//                            time = 0;
+//                            hero.setupAttack();
+//                            gemcolatk = true;
+//                        } else {
+//                            time2 = 0;
+//                            villian.setupAttack();
+//                            mentoratk = true;
+//                        }
+//                    }
+//                }
+//                return true;
+//            }
+//        });
+//        return imageButton;
+//    }
+
     /**
-     * This function sets up the Imagebuttons for the choices.
+     * Sets up the ImageButtons for the choices.
      */
-    private ImageButton newImageButton(String style, float x, float y, float w, float h,
-                                       final int i) {
+    private ImageButton newImageButton(String style, float x, float y, float w, float h, final int i) {
         w = Constants.gameWidth(w);
         h = Constants.gameHeight(h);
         ImageButton imageButton = new ImageButton(newStyle(style, w, h));
         imageButton.setPosition(Constants.gameX(x, w), Constants.gameY(y, h));
         imageButton.setSize(w, h);
         stage.addActor(imageButton);
-        imageButton.addListener(new InputListener(){
+        imageButton.addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                System.out.println("Image Touch: " + i);
+                System.out.println("Image Touch: " + i + ", Choice: " + choices[i]);
                 if (!gemcolatk && !mentoratk) {
-                    if(battleType == 5) {
+                    if (battleType == 5) {
                         if (choices[i].equals(choice)) {
-                            if(whoseTurn == 0) {
-                                if(falseFirstTime) {
+                            if (whoseTurn == 0) {
+                                if (falseFirstTime) {
                                     player1.hasCountered();
                                 }
                                 player1.gotCorrect();
                                 hero.setupAttack();
                                 gemcolatk = true;
                             } else {
-                                if(falseFirstTime) {
+                                if (falseFirstTime) {
                                     player2.hasCountered();
                                 }
                                 player2.gotCorrect();
@@ -272,16 +334,16 @@ public class battleMode extends DefaultScreen {
                             }
                             change();
                         } else {
-                            if(!falseFirstTime) {
+                            if (!falseFirstTime) {
                                 falseFirstTime = true;
                             }
-                            if(whoseTurn == 0) {
+                            if (whoseTurn == 0) {
                                 player1.hasMissed();
                             } else {
                                 player2.hasMissed();
                             }
                         }
-                        whoseTurn = (whoseTurn+1) % 2;
+                        whoseTurn = (whoseTurn + 1) % 2;
                     } else {
                         if (choices[i].equals(choice)) {
                             change();
@@ -329,18 +391,60 @@ public class battleMode extends DefaultScreen {
 
     }
 
+//    /**
+//     * This function changes the image of the Imagebuttons.
+//     */
+//    private ImageButton.ImageButtonStyle newStyle(String string, float width, float height) {
+//        ImageButton.ImageButtonStyle buttonStyle = new ImageButton.ImageButtonStyle();
+//        buttonStyle.down = skin.getDrawable("ButtonsPressed");
+//        buttonStyle.up = skin.getDrawable("ButtonUnpressed");
+//        Drawable image = AssetManager.getInstance().convertTextureToDrawable(string+".png");
+//        image.setMinWidth(width*.75f);
+//        image.setMinHeight(height*.75f);
+//        buttonStyle.imageUp = image;
+//        return buttonStyle;
+//    }
+
     /**
-     * This function changes the image of the Imagebuttons.
+     * Changes the image of the ImageButtons.
      */
     private ImageButton.ImageButtonStyle newStyle(String string, float width, float height) {
         ImageButton.ImageButtonStyle buttonStyle = new ImageButton.ImageButtonStyle();
         buttonStyle.down = skin.getDrawable("ButtonsPressed");
         buttonStyle.up = skin.getDrawable("ButtonUnpressed");
-        Drawable image = AssetManager.getInstance().convertTextureToDrawable(string+".png");
-        image.setMinWidth(width*.75f);
-        image.setMinHeight(height*.75f);
+
+        // Get the correct texture path
+        String texturePath = getTexturePath(string);
+        System.out.println("Loading texture for " + string + ": " + texturePath);
+        Drawable image = AssetManager.getInstance().convertTextureToDrawable(texturePath);
+        if (image == null) {
+            System.err.println("Texture not found: " + texturePath + ", using fallback");
+            image = skin.getDrawable("ButtonUnpressed"); // Fallback to atlas region
+        }
+        image.setMinWidth(width * 0.75f);
+        image.setMinHeight(height * 0.75f);
         buttonStyle.imageUp = image;
         return buttonStyle;
+    }
+
+    /**
+     * Helper method to map choice strings to their texture paths.
+     */
+    private String getTexturePath(String choice) {
+        // List of subfolders in English/levelTextures/
+        String[] subfolders = {
+            "At", "Ap", "Ug", "Ad", "Am", "An", "Ub", "Ig", "In", "Ip",
+            "Ock", "Uck", "Ish", "Ill", "Ob"
+        };
+        for (String subfolder : subfolders) {
+            String path = "English/levelTextures/" + subfolder + "/" + choice + ".png";
+            if (Gdx.files.internal(path).exists()) {
+                return path;
+            }
+        }
+        // Fallback path
+        System.err.println("No texture found for choice: " + choice);
+        return "English/levelTextures/At/Hat.png"; // Default fallback
     }
 
     /**

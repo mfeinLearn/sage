@@ -1,6 +1,7 @@
 package com.mfein.sage;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -220,22 +221,47 @@ public class MenuScreen extends DefaultScreen {
 //        imageButton.addListener(listener);
 //        stage.addActor(imageButton);
 //    }
+//    private void setButton(String s, ChangeListener listener, int i) {
+//        // Use the full path as registered by grabAssets
+//        TextureRegionDrawable buttonIcon = AssetManager.getInstance()
+//            .convertTextureToDrawable("menuButtons/" + s + "Button.png");
+//        TextureRegionDrawable buttonLogo = AssetManager.getInstance()
+//            .convertTextureToDrawable("menuLogos/" + s + "Logo.png");
+//        ImageButton imageButton = new ImageButton(buttonIcon);
+//        imageButton.add(new Image(buttonLogo)); // Adds the logo as an overlay
+//        float width = Constants.gameWidth(256f + 60f * s.length());
+//        float height = Constants.gameHeight(192f);
+//        imageButton.setSize(width, height);
+//        imageButton.setPosition(Constants.gameX(.35f, 0),
+//            Constants.gameY(.65f - (.15f * i), height));
+//        imageButton.addListener(listener);
+//        stage.addActor(imageButton);
+//    }
+
+
     private void setButton(String s, ChangeListener listener, int i) {
-        // Use the full path as registered by grabAssets
-        TextureRegionDrawable buttonIcon = AssetManager.getInstance()
-            .convertTextureToDrawable("menuButtons/" + s + "Button.png");
-        TextureRegionDrawable buttonLogo = AssetManager.getInstance()
-            .convertTextureToDrawable("menuLogos/" + s + "Logo.png");
+        String buttonPath = "menuButtons/" + s + "Button.png";
+        String logoPath = "menuLogos/" + s + "Logo.png";
+        TextureRegionDrawable buttonIcon = AssetManager.getInstance().convertTextureToDrawable(buttonPath);
+        TextureRegionDrawable buttonLogo = AssetManager.getInstance().convertTextureToDrawable(logoPath);
+        if (buttonIcon == null) {
+            System.err.println("Failed to load button texture: " + buttonPath);
+            buttonIcon = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("English/levelTextures/At/Hat.png"))));
+        }
+        if (buttonLogo == null) {
+            System.err.println("Failed to load logo texture: " + logoPath);
+            buttonLogo = buttonIcon; // Fallback to button texture
+        }
         ImageButton imageButton = new ImageButton(buttonIcon);
-        imageButton.add(new Image(buttonLogo)); // Adds the logo as an overlay
+        imageButton.add(new Image(buttonLogo));
         float width = Constants.gameWidth(256f + 60f * s.length());
         float height = Constants.gameHeight(192f);
         imageButton.setSize(width, height);
-        imageButton.setPosition(Constants.gameX(.35f, 0),
-            Constants.gameY(.65f - (.15f * i), height));
+        imageButton.setPosition(Constants.gameX(.35f, 0), Constants.gameY(.65f - (.15f * i), height));
         imageButton.addListener(listener);
         stage.addActor(imageButton);
     }
+
 
     /**
      * This function disposes of the assets.
