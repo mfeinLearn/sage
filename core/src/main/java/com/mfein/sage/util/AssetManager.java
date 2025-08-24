@@ -71,17 +71,37 @@ public class AssetManager {
         if (handle != null) registerAsset(key, new Texture(handle));
     }
 
+//    /**
+//     * Create a Sound object and register it to the asset map.
+//     * @param key: The asset's key.
+//     * @param internalPath: The path of the asset within the assets folder.
+//     * This function only stores the Audio as well as the FileHandle because of the need to
+//     *                    freely use audio as a Music or as a Sound Object.
+//     */
+//    public void registerAudio(String key, String internalPath) {
+//        FileHandle handle = getHandle(internalPath);
+//        if (handle != null) {
+//            registerAsset(key, Gdx.audio.newSound(Gdx.files.internal(internalPath)));
+//            fileMap.put(key, Gdx.files.internal(internalPath));
+//        }
+//    }
+
     /**
-     * Create a Sound object and register it to the asset map.
+     * Create a Sound or Music object and register it to the asset map.
      * @param key: The asset's key.
      * @param internalPath: The path of the asset within the assets folder.
-     * This function only stores the Audio as well as the FileHandle because of the need to
-     *                    freely use audio as a Music or as a Sound Object.
+     * Registers as Music for .mp3 files and Sound for .wav files.
      */
     public void registerAudio(String key, String internalPath) {
         FileHandle handle = getHandle(internalPath);
         if (handle != null) {
-            registerAsset(key, Gdx.audio.newSound(Gdx.files.internal(internalPath)));
+            if (internalPath.toLowerCase().endsWith(".mp3")) {
+                System.out.println("Registering " + key + " as Music");
+                registerAsset(key, Gdx.audio.newMusic(Gdx.files.internal(internalPath)));
+            } else {
+                System.out.println("Registering " + key + " as Sound");
+                registerAsset(key, Gdx.audio.newSound(Gdx.files.internal(internalPath)));
+            }
             fileMap.put(key, Gdx.files.internal(internalPath));
         }
     }

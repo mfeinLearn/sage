@@ -205,13 +205,29 @@ public class MenuScreen extends DefaultScreen {
     /**
      * This function sets up the basic button stuff.
      */
+//    private void setButton(String s, ChangeListener listener, int i) {
+//        TextureRegionDrawable buttonIcon = AssetManager.getInstance()
+//            .convertTextureToDrawable(s + "Button.png");
+//        TextureRegionDrawable buttonLogo = AssetManager.getInstance()
+//            .convertTextureToDrawable(s + "Logo.png");
+//        ImageButton imageButton = new ImageButton(buttonIcon);
+//        imageButton.add(new Image(buttonLogo));
+//        float width = Constants.gameWidth(256f + 60f * s.length());
+//        float height = Constants.gameHeight(192f);
+//        imageButton.setSize(width, height);
+//        imageButton.setPosition(Constants.gameX(.35f, 0),
+//            Constants.gameY(.65f - (.15f * i), height));
+//        imageButton.addListener(listener);
+//        stage.addActor(imageButton);
+//    }
     private void setButton(String s, ChangeListener listener, int i) {
+        // Use the full path as registered by grabAssets
         TextureRegionDrawable buttonIcon = AssetManager.getInstance()
-            .convertTextureToDrawable(s + "Button.png");
+            .convertTextureToDrawable("menuButtons/" + s + "Button.png");
         TextureRegionDrawable buttonLogo = AssetManager.getInstance()
-            .convertTextureToDrawable(s + "Logo.png");
+            .convertTextureToDrawable("menuLogos/" + s + "Logo.png");
         ImageButton imageButton = new ImageButton(buttonIcon);
-        imageButton.add(new Image(buttonLogo));
+        imageButton.add(new Image(buttonLogo)); // Adds the logo as an overlay
         float width = Constants.gameWidth(256f + 60f * s.length());
         float height = Constants.gameHeight(192f);
         imageButton.setSize(width, height);
