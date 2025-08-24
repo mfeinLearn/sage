@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Timer;
 import com.mfein.sage.Menu_Options.Journey.LevelScreen;
 import com.mfein.sage.Menu_Options.Battle.MultiplayerResultScreen;
@@ -134,13 +136,44 @@ public class battleMode extends DefaultScreen {
     /**
      * This function sets up the skin.
      */
+//    private void setupSkin() {
+//        TextureAtlas buttonAtlas = new TextureAtlas("buttons/button.pack");
+//        skin.addRegions(buttonAtlas);
+//        font = new BitmapFont();
+//        font.getData().setScale(Constants.gameWidth(5), Constants.gameHeight(5));
+//        skin.add("largeFont", new BitmapFont(Gdx.files
+//            .internal("skin/fonts/chalkboard-font-large.fnt")));
+//        Label.LabelStyle largeLabelStyle = new Label.LabelStyle();
+//        largeLabelStyle.font = skin.getFont("largeFont");
+//        largeLabelStyle.fontColor = Color.WHITE;
+//        skin.add("largeLabel", largeLabelStyle);
+//    }
+
     private void setupSkin() {
-        TextureAtlas buttonAtlas = new TextureAtlas("buttons/button.pack");
-        skin.addRegions(buttonAtlas);
+        try {
+            TextureAtlas buttonAtlas = new TextureAtlas(Gdx.files.internal("buttons/button.pack"));
+            skin.addRegions(buttonAtlas);
+            // Debug atlas regions
+            for (TextureAtlas.AtlasRegion region : buttonAtlas.getRegions()) {
+                System.out.println("Atlas region: " + region.name);
+            }
+            // Verify specific drawables
+            if (skin.getDrawable("ButtonUnpressed") == null) {
+                System.err.println("Error: ButtonUnpressed drawable not found in skin");
+            }
+            if (skin.getDrawable("ButtonsPressed") == null) {
+                System.err.println("Error: ButtonsPressed drawable not found in skin");
+            }
+        } catch (Exception e) {
+            System.err.println("Failed to load button.pack: " + e.getMessage());
+            // Create a fallback skin with a default texture
+            Texture fallbackTexture = new Texture(Gdx.files.internal("English/levelTextures/At/Hat.png"));
+            skin.add("ButtonUnpressed", new TextureRegionDrawable(new TextureRegion(fallbackTexture)));
+            skin.add("ButtonsPressed", new TextureRegionDrawable(new TextureRegion(fallbackTexture)));
+        }
         font = new BitmapFont();
         font.getData().setScale(Constants.gameWidth(5), Constants.gameHeight(5));
-        skin.add("largeFont", new BitmapFont(Gdx.files
-            .internal("skin/fonts/chalkboard-font-large.fnt")));
+        skin.add("largeFont", new BitmapFont(Gdx.files.internal("skin/fonts/chalkboard-font-large.fnt")));
         Label.LabelStyle largeLabelStyle = new Label.LabelStyle();
         largeLabelStyle.font = skin.getFont("largeFont");
         largeLabelStyle.fontColor = Color.WHITE;
@@ -408,18 +441,48 @@ public class battleMode extends DefaultScreen {
     /**
      * Changes the image of the ImageButtons.
      */
+//    private ImageButton.ImageButtonStyle newStyle(String string, float width, float height) {
+//        ImageButton.ImageButtonStyle buttonStyle = new ImageButton.ImageButtonStyle();
+//        buttonStyle.down = skin.getDrawable("ButtonsPressed");
+//        buttonStyle.up = skin.getDrawable("ButtonUnpressed");
+//
+//        // Get the correct texture path
+//        String texturePath = getTexturePath(string);
+//        System.out.println("Loading texture for " + string + ": " + texturePath);
+//        Drawable image = AssetManager.getInstance().convertTextureToDrawable(texturePath);
+//        if (image == null) {
+//            System.err.println("Texture not found: " + texturePath + ", using fallback");
+//            image = skin.getDrawable("ButtonUnpressed"); // Fallback to atlas region
+//        }
+//        image.setMinWidth(width * 0.75f);
+//        image.setMinHeight(height * 0.75f);
+//        buttonStyle.imageUp = image;
+//        return buttonStyle;
+//    }
     private ImageButton.ImageButtonStyle newStyle(String string, float width, float height) {
         ImageButton.ImageButtonStyle buttonStyle = new ImageButton.ImageButtonStyle();
         buttonStyle.down = skin.getDrawable("ButtonsPressed");
         buttonStyle.up = skin.getDrawable("ButtonUnpressed");
 
-        // Get the correct texture path
+        if (buttonStyle.down == null || buttonStyle.up == null) {
+            System.err.println("Skin drawables missing, using fallback texture");
+            Texture fallbackTexture = new Texture(Gdx.files.internal("English/levelTextures/At/Hat.png"));
+            TextureRegionDrawable fallbackDrawable = new TextureRegionDrawable(new TextureRegion(fallbackTexture));
+            if (buttonStyle.down == null) buttonStyle.down = fallbackDrawable;
+            if (buttonStyle.up == null) buttonStyle.up = fallbackDrawable;
+        }
+
         String texturePath = getTexturePath(string);
         System.out.println("Loading texture for " + string + ": " + texturePath);
         Drawable image = AssetManager.getInstance().convertTextureToDrawable(texturePath);
         if (image == null) {
             System.err.println("Texture not found: " + texturePath + ", using fallback");
-            image = skin.getDrawable("ButtonUnpressed"); // Fallback to atlas region
+            image = skin.getDrawable("ButtonUnpressed");
+            if (image == null) {
+                System.err.println("ButtonUnpressed drawable not found, using default texture");
+                Texture fallbackTexture = new Texture(Gdx.files.internal("English/levelTextures/At/Hat.png"));
+                image = new TextureRegionDrawable(new TextureRegion(fallbackTexture));
+            }
         }
         image.setMinWidth(width * 0.75f);
         image.setMinHeight(height * 0.75f);
@@ -427,11 +490,29 @@ public class battleMode extends DefaultScreen {
         return buttonStyle;
     }
 
+
+
     /**
      * Helper method to map choice strings to their texture paths.
      */
+//    private String getTexturePath(String choice) {
+//        // List of subfolders in English/levelTextures/
+//        String[] subfolders = {
+//            "At", "Ap", "Ug", "Ad", "Am", "An", "Ub", "Ig", "In", "Ip",
+//            "Ock", "Uck", "Ish", "Ill", "Ob"
+//        };
+//        for (String subfolder : subfolders) {
+//            String path = "English/levelTextures/" + subfolder + "/" + choice + ".png";
+//            if (Gdx.files.internal(path).exists()) {
+//                return path;
+//            }
+//        }
+//        // Fallback path
+//        System.err.println("No texture found for choice: " + choice);
+//        return "English/levelTextures/At/Hat.png"; // Default fallback
+//    }
+
     private String getTexturePath(String choice) {
-        // List of subfolders in English/levelTextures/
         String[] subfolders = {
             "At", "Ap", "Ug", "Ad", "Am", "An", "Ub", "Ig", "In", "Ip",
             "Ock", "Uck", "Ish", "Ill", "Ob"
@@ -439,12 +520,21 @@ public class battleMode extends DefaultScreen {
         for (String subfolder : subfolders) {
             String path = "English/levelTextures/" + subfolder + "/" + choice + ".png";
             if (Gdx.files.internal(path).exists()) {
+                System.out.println("Found texture: " + path);
                 return path;
+            } else {
+                System.out.println("Texture not found: " + path);
             }
         }
-        // Fallback path
-        System.err.println("No texture found for choice: " + choice);
-        return "English/levelTextures/At/Hat.png"; // Default fallback
+        System.err.println("No texture found for choice: " + choice + ", using fallback");
+        // Ensure fallback texture exists
+        String fallbackPath = "English/levelTextures/At/Hat.png";
+        if (Gdx.files.internal(fallbackPath).exists()) {
+            return fallbackPath;
+        } else {
+            System.err.println("Fallback texture not found: " + fallbackPath);
+            return "menuButtons/playButton.png"; // Secondary fallback
+        }
     }
 
     /**
